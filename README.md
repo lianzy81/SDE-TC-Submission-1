@@ -32,7 +32,7 @@ Once the airflow-scheduler is ready, the stack can be accessed on http://localho
 - Refer to schedule, which is set as "15 * * * *", which means every hour at 15 minutes past the hour.
 - Refer to next run for the datetime of the next scheduled run, which is set at 2022-12-22, 00:15.
 - The "data_pipeline_dag" can be executed manually by pressing the "play" button under "Actions", followed by "Trigger DAG", which will generate the logs and outputs.
-![airflow screenshot](../images/airflow_screenshot.png)
+![airflow screenshot](./images/airflow_screenshot.png)
 
 ### (D) Input Raw Data
 The input raw application data are located within the "data/raw" folder.
