@@ -14,7 +14,7 @@ from datetime import datetime
 with DAG(
     dag_id="data_pipeline_dag",
     start_date=datetime(2022, 12, 14),
-    schedule="36 14 * * *" #None
+    schedule=None #"0 * * * *"
 ) as dag:
 
     start_task = EmptyOperator(
