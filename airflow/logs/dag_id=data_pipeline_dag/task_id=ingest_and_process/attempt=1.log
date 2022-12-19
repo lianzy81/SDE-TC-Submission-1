@@ -1,0 +1,40 @@
+[2022-12-19T15:16:16.704+0000] {taskinstance.py:1165} INFO - Dependencies all met for <TaskInstance: data_pipeline_dag.ingest_and_process manual__2022-12-19T15:16:14.866033+00:00 [queued]>
+[2022-12-19T15:16:16.709+0000] {taskinstance.py:1165} INFO - Dependencies all met for <TaskInstance: data_pipeline_dag.ingest_and_process manual__2022-12-19T15:16:14.866033+00:00 [queued]>
+[2022-12-19T15:16:16.709+0000] {taskinstance.py:1362} INFO - 
+--------------------------------------------------------------------------------
+[2022-12-19T15:16:16.709+0000] {taskinstance.py:1363} INFO - Starting attempt 1 of 1
+[2022-12-19T15:16:16.709+0000] {taskinstance.py:1364} INFO - 
+--------------------------------------------------------------------------------
+[2022-12-19T15:16:16.715+0000] {taskinstance.py:1383} INFO - Executing <Task(PythonOperator): ingest_and_process> on 2022-12-19 15:16:14.866033+00:00
+[2022-12-19T15:16:16.719+0000] {standard_task_runner.py:55} INFO - Started process 232 to run task
+[2022-12-19T15:16:16.721+0000] {standard_task_runner.py:82} INFO - Running: ['***', 'tasks', 'run', 'data_pipeline_dag', 'ingest_and_process', 'manual__2022-12-19T15:16:14.866033+00:00', '--job-id', '2', '--raw', '--subdir', 'DAGS_FOLDER/data_pipeline.py', '--cfg-path', '/tmp/tmp0mnovimk']
+[2022-12-19T15:16:16.722+0000] {standard_task_runner.py:83} INFO - Job 2: Subtask ingest_and_process
+[2022-12-19T15:16:16.757+0000] {task_command.py:376} INFO - Running <TaskInstance: data_pipeline_dag.ingest_and_process manual__2022-12-19T15:16:14.866033+00:00 [running]> on host 148afbc9b5db
+[2022-12-19T15:16:16.793+0000] {taskinstance.py:1590} INFO - Exporting the following env vars:
+AIRFLOW_CTX_DAG_OWNER=***
+AIRFLOW_CTX_DAG_ID=data_pipeline_dag
+AIRFLOW_CTX_TASK_ID=ingest_and_process
+AIRFLOW_CTX_EXECUTION_DATE=2022-12-19T15:16:14.866033+00:00
+AIRFLOW_CTX_TRY_NUMBER=1
+AIRFLOW_CTX_DAG_RUN_ID=manual__2022-12-19T15:16:14.866033+00:00
+[2022-12-19T15:16:16.794+0000] {logging_mixin.py:137} INFO - Processed files: []
+[2022-12-19T15:16:16.794+0000] {logging_mixin.py:137} INFO - applications_dataset_1.csv:
+[2022-12-19T15:16:16.794+0000] {logging_mixin.py:137} INFO - - ingest data from ./data/raw/applications_dataset_1.csv...
+[2022-12-19T15:16:16.799+0000] {logging_mixin.py:137} INFO - - clean data...
+[2022-12-19T15:16:16.809+0000] {logging_mixin.py:137} INFO - - validate data...
+[2022-12-19T15:16:16.814+0000] {logging_mixin.py:137} INFO - - generate member id for successful applications
+[2022-12-19T15:16:16.830+0000] {logging_mixin.py:137} INFO - - output successful applications...
+[2022-12-19T15:16:16.834+0000] {logging_mixin.py:137} INFO - - output failed applications...
+[2022-12-19T15:16:16.838+0000] {logging_mixin.py:137} INFO - - Done!
+[2022-12-19T15:16:16.838+0000] {logging_mixin.py:137} INFO - applications_dataset_2.csv:
+[2022-12-19T15:16:16.838+0000] {logging_mixin.py:137} INFO - - ingest data from ./data/raw/applications_dataset_2.csv...
+[2022-12-19T15:16:16.842+0000] {logging_mixin.py:137} INFO - - clean data...
+[2022-12-19T15:16:16.853+0000] {logging_mixin.py:137} INFO - - validate data...
+[2022-12-19T15:16:16.859+0000] {logging_mixin.py:137} INFO - - generate member id for successful applications
+[2022-12-19T15:16:16.881+0000] {logging_mixin.py:137} INFO - - output successful applications...
+[2022-12-19T15:16:16.884+0000] {logging_mixin.py:137} INFO - - output failed applications...
+[2022-12-19T15:16:16.890+0000] {logging_mixin.py:137} INFO - - Done!
+[2022-12-19T15:16:16.890+0000] {python.py:177} INFO - Done. Returned value was: 0
+[2022-12-19T15:16:16.905+0000] {taskinstance.py:1401} INFO - Marking task as SUCCESS. dag_id=data_pipeline_dag, task_id=ingest_and_process, execution_date=20221219T151614, start_date=20221219T151616, end_date=20221219T151616
+[2022-12-19T15:16:16.933+0000] {local_task_job.py:159} INFO - Task exited with return code 0
+[2022-12-19T15:16:16.968+0000] {taskinstance.py:2623} INFO - 1 downstream tasks scheduled from follow-on schedule check
