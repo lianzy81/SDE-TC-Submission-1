@@ -95,24 +95,24 @@ You can find the setup.sql file with the DDL statements at the location "databas
 
 ### Q1. Which are the top 10 members by spending?
 ```
-    SELECT transactions.member_id, members.first_name, members.last_name, sum(transactions.total_items_price) as total_spending
-    FROM transactions
-    INNER JOIN members
-    ON transactions.member_id = members.member_id
-    GROUP BY (transactions.member_id, members.first_name, members.last_name)
-    ORDER BY total_spending DESC
-    LIMIT 10;
+SELECT transactions.member_id, members.first_name, members.last_name, sum(transactions.total_items_price) as total_spending
+FROM transactions
+INNER JOIN members
+ON transactions.member_id = members.member_id
+GROUP BY (transactions.member_id, members.first_name, members.last_name)
+ORDER BY total_spending DESC
+LIMIT 10;
 ```
 
 ### Q2. Which are the top 3 items that are frequently brought by members?
 ```
-    SELECT txn_details.item_id, items.item_name, sum(txn_details.quantity) as total_quantity
-    FROM txn_details
-    INNER JOIN items
-    ON txn_details.item_id = items.item_id
-    GROUP BY (txn_details.item_id, items.item_name)
-    ORDER BY total_quantity DESC
-    LIMIT 3;
+SELECT txn_details.item_id, items.item_name, sum(txn_details.quantity) as total_quantity
+FROM txn_details
+INNER JOIN items
+ON txn_details.item_id = items.item_id
+GROUP BY (txn_details.item_id, items.item_name)
+ORDER BY total_quantity DESC
+LIMIT 3;
 ```
 
 The above SQL commands have also been added to the end of the setup.sql file. The outputs from the above queries can be viewed inside the logs for the database container. 
@@ -136,22 +136,31 @@ A role based access strategy will be suitable to meet the needs of the following
 
 The database/setup.sql file in Section 2 has been updated to implement the role based access strategy, One group role is created for each team above. Each group role is granted relevant permissions on specific tables to meet their needs as described below. 
 -   logistics_user
-    -   SELECT on items, txn_details, transactions
-    -   INSERT, UPDATE on transactions
+```
+CREATE ROLE logistics_user;
+GRANT SELECT on items, txn_details, transactions to logistics_user;
+GRANT INSERT, UPDATE on transactions to logistics_user;
+```
 -   analytics_user
-    -   SELECT on members, items, transactions, txn_details
+```
+CREATE ROLE analytics_user;
+GRANT SELECT on members, items, transactions, txn_details to analytics_user;
+```
 -   sales_user
-    -   SELECT, INSERT, UPDATE, DELETE on items
+```
+CREATE ROLE sales_user;
+GRANT SELECT, INSERT, UPDATE, DELETE on items to sales_user;
+```
 
 Thereafter, users can be created for specific members of each team, then assigned to their respective group roles to obtain the relevant permissions (see example SQL code below).
 
 ```
-    CREATE USER log_user1 WITH ENCRYPTED PASSWORD 'log_user1';
-    CREATE USER ana_user1 WITH ENCRYPTED PASSWORD 'ana_user1';
-    CREATE USER sal_user1 WITH ENCRYPTED PASSWORD 'sal_user1';
-    GRANT logistics_user to log_user1;
-    GRANT analytics_user to ana_user1;
-    GRANT sales_user to sal_user1;
+CREATE USER log_user1 WITH ENCRYPTED PASSWORD 'log_user1';
+CREATE USER ana_user1 WITH ENCRYPTED PASSWORD 'ana_user1';
+CREATE USER sal_user1 WITH ENCRYPTED PASSWORD 'sal_user1';
+GRANT logistics_user to log_user1;
+GRANT analytics_user to ana_user1;
+GRANT sales_user to sal_user1;
 ```
 
 ### Design 2
