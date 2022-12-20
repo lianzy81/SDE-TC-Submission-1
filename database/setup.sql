@@ -28,7 +28,7 @@ CREATE TABLE items (
 );
 
 CREATE TYPE transaction_status as ENUM (
-    'ordered and paid',
+    'ordered-and-paid',
     'preparing',
     'in-transit',
     'delivered',
@@ -88,7 +88,7 @@ Section 2: Databases
 
 Write SQL Statements for the following questions.
 *****************************************************/
--- Q1. Which are the top 10 members by spending
+-- Q1. Which are the top 10 members by spending?
 SELECT transactions.member_id, members.first_name, members.last_name, sum(transactions.total_items_price) as total_spending
 FROM transactions
 INNER JOIN members
@@ -97,7 +97,7 @@ GROUP BY (transactions.member_id, members.first_name, members.last_name)
 ORDER BY total_spending DESC
 LIMIT 10;
 
--- Q2. Which are the top 3 items that are frequently brought by members
+-- Q2. Which are the top 3 items that are frequently brought by members?
 SELECT txn_details.item_id, items.item_name, sum(txn_details.quantity) as total_quantity
 FROM txn_details
 INNER JOIN items
