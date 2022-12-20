@@ -12,20 +12,27 @@ All codes are implemented on an Ubuntu 20.04.5 LTS laptop with the following ins
 - docker-compose version 1.29.2
 ---
 
-## Section1: Data Pipelines
+## Section 1: Data Pipelines
 The required data pipeline is implemented using airflow via docker containers using the following Docker images:
 - apache/airflow:2.4.3-python3.9
 - postgres:15.1
 
-### (A) Start and run all of the containers used in the stack
+### Scripts
+The relevant Python scripts for the data pipeline are located at:
+- airflow/dags/data_pipeline.py
+- airflow/plugins/dataproc_config.py
+- airflow/plugins/preprocess.py
+
+### Execution Steps
+#### (A) Start and run all of the containers used in the stack
     docker-compose up -d
 
-### (B) Verify that the airflow-scheduler container is ready
+#### (B) Verify that the airflow-scheduler container is ready
     docker logs airflow-scheduler 
 
 Once ready, you should see two log entries of "Booting worker with pid" and one log entry with "Launched DagFileProcessorManager"
 
-### (C) Access the airflow stack
+#### (C) Access the airflow stack
 Once the airflow-scheduler is ready, the stack can be accessed on http://localhost:8080.
 - Log in using the default username "airflow" and default password "airflow". 
 - You should see one "data_pipeline_dag" in the DAGs page (see screenshot below).
@@ -34,54 +41,50 @@ Once the airflow-scheduler is ready, the stack can be accessed on http://localho
 - The "data_pipeline_dag" can be executed manually by pressing the "play" button under "Actions", followed by "Trigger DAG", which will generate the logs and outputs.
 ![airflow screenshot](./images/airflow_screenshot.png)
 
-### (D) Input Raw Data
+#### (D) Input Raw Data
 The input raw application data are located within the "data/raw" folder.
 
-### (E) Scripts
-The relevant Python scripts for the data pipeline are located at:
-- airflow/dags/data_pipeline.py
-- airflow/plugins/dataproc_config.py
-- airflow/plugins/preprocess.py
-
-### (F) Outputs
+#### (E) Outputs
 The processed data for successful and failed applications from each application dataset have been uploaded here and are located in the folders:
 - "outputs/successful"
 - "outputs/failed"
 
-### (G) Logs
+#### (F) Logs
 The data pipeline logs are stored under "airflow/logs/dag_id=data_pipeline_dag" with a separate log folder for each task as follows:
 - task_id=task_id=ingest_and_process
 - task_id=validity_check
 Sample logs have been uploaed here under the same folder structure.
 
-### (H) Tear down the airflow stack gracefully
+#### (G) Tear down the airflow stack gracefully
     docker-compose down -v
 
 
-## Section2: Databases
+## Section 2: Databases
 
 ## Part 1: Setup sales transactions database for an e-commerce company
-The required database for sales transactions is implemented via a postgres:15.1 Docker container. Additions have been made to the docker-compose.yml file used in Section 1 to start up the database service (container name db1) with the setup.sql file mounted inside the /docker-entrypoint-initdb.d directory within the container. This setup.sql file contains all relevant DDL statements needed to create an admin user ("dbadmin"), the sales database and associated tables. You can find the setup.sql file inside the local "database" directory in this repo.
+The required database for sales transactions is implemented via a postgres:15.1 Docker container. Additions have been made to the docker-compose.yml file used in Section 1 to start up the database service (container name db1) with the setup.sql file mounted inside the /docker-entrypoint-initdb.d directory within the container. This setup.sql file contains all relevant DDL statements needed to create an admin user ("dbadmin"), the sales database and associated tables. 
 
-### (A) Start and run all of the containers used in the stack
+### SQL Scripts
+You can find the setup.sql file at the location "database/setup.sql" in this repo.
+
+### Execution Steps
+#### (A) Start and run all of the containers used in the stack
     docker-compose up -d
 
-### (B) View the logs associated with the database and table creation inside the Docker container db1
+#### (B) View the logs associated with the database and table creation inside the Docker container db1
     docker logs db1
 
-### (C) Enter into container db1, and then into postgres to view the tables created.
+#### (C) Enter into container db1, and then into postgres to view the tables created.
     docker exec -it db1 /bin/bash
 
-### (D) Connect to the sales database using the "dbadmin" user
+#### (D) Connect to the sales database using the "dbadmin" user
     psql -d sales -U dbadmin
 
-### (E) List tables created in the sales database
+#### (E) List tables created in the sales database
     \dt
 
-### (F) View each table using SQL.
+#### (F) View each table using SQL.
     select * from <table_name>;
-
-SQL Statements for the following two questions are also written at the end of the setup.sql file, which is reproduced below.
 
 
 ## Part 2: Write SQL Statements for the following questions.
@@ -109,4 +112,5 @@ LIMIT 3;
 ```
 
 The above SQL commands have also been added to the end of the setup.sql file. The outputs from the above queries can be viewed inside the logs for the database container. 
+
     docker logs db1
