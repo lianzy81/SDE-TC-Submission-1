@@ -62,10 +62,14 @@ Sample logs have been uploaed here under the same folder structure.
 ## Section 2: Databases
 
 ## Part 1: Setup sales transactions database for an e-commerce company
-The required database for sales transactions is implemented via a postgres:15.1 Docker container. Additions have been made to the docker-compose.yml file used in Section 1 to start up the database service (container name db1) with the setup.sql file mounted inside the /docker-entrypoint-initdb.d directory within the container. This setup.sql file contains all relevant DDL statements needed to create an admin user ("dbadmin"), the sales database and associated tables. 
+The required database for sales transactions is implemented via a postgres:15.1 Docker container. Additions have been made to the docker-compose.yml file used in Section 1 to start up the database service (container name db1) with the setup.sql file mounted inside the /docker-entrypoint-initdb.d directory within the container. This setup.sql file contains all relevant DDL statements needed to create an admin user ("dbadmin"), the sales database and associated tables. See ERD below for the tables created and their relationships. 
+
+### Entity Relationship Diagram (ERD)
+
+![ERD](./images/ERD_v1.png)
 
 ### SQL Scripts
-You can find the setup.sql file at the location "database/setup.sql" in this repo.
+You can find the setup.sql file with the DDL statements at the location "database/setup.sql".
 
 ### Execution Steps
 #### (A) Start and run all of the containers used in the stack
