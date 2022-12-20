@@ -7,17 +7,17 @@ The submission is split into 5 sections:
 4. Charts & APIs
 5. Machine Learning
 
+All codes are implemented on an Ubuntu 20.04.5 LTS laptop with the following installed:
+- Docker version 20.10.21
+- docker-compose version 1.29.2
 ---
 
 ## Section1: Data Pipelines
-The data pipeline is implemented using airflow via docker containers with the following:
-- Docker version 20.10.21
-- docker-compose version 1.29.2
-- Docker images
-    - apache/airflow:2.4.3-python3.9
-    - postgres:15.1
+The required data pipeline is implemented using airflow via docker containers using the following Docker images:
+- apache/airflow:2.4.3-python3.9
+- postgres:15.1
 
-### (A) Run all of the containers used in the stack
+### (A) Start and run all of the containers used in the stack
     docker-compose up -d
 
 ### (B) Verify that the airflow-scheduler container is ready
@@ -56,3 +56,57 @@ Sample logs have been uploaed here under the same folder structure.
 
 ### (H) Tear down the airflow stack gracefully
     docker-compose down -v
+
+
+## Section2: Databases
+
+## Part 1: Setup sales transactions database for an e-commerce company
+The required database for sales transactions is implemented via a postgres:15.1 Docker container. Additions have been made to the docker-compose.yml file used in Section 1 to start up the database service (container name db1) with the setup.sql file mounted inside the /docker-entrypoint-initdb.d directory within the container. This setup.sql file contains all relevant DDL statements needed to create an admin user ("dbadmin"), the sales database and associated tables. You can find the setup.sql file inside the local "database" directory in this repo.
+
+### (A) Start and run all of the containers used in the stack
+    docker-compose up -d
+
+### (B) View the logs associated with the database and table creation inside the Docker container db1
+    docker logs db1
+
+### (C) Enter into container db1, and then into postgres to view the tables created.
+    docker exec -it db1 /bin/bash
+
+### (D) Connect to the sales database using the "dbadmin" user
+    psql -d sales -U dbadmin
+
+### (E) List tables created in the sales database
+    \dt
+
+### (F) View each table using SQL.
+    select * from <table_name>;
+
+SQL Statements for the following two questions are also written at the end of the setup.sql file, which is reproduced below.
+
+
+## Part 2: Write SQL Statements for the following questions.
+
+### Q1. Which are the top 10 members by spending?
+```
+SELECT transactions.member_id, members.first_name, members.last_name, sum(transactions.total_items_price) as total_spending
+FROM transactions
+INNER JOIN members
+ON transactions.member_id = members.member_id
+GROUP BY (transactions.member_id, members.first_name, members.last_name)
+ORDER BY total_spending DESC
+LIMIT 10;
+```
+
+### Q2. Which are the top 3 items that are frequently brought by members?
+```
+SELECT txn_details.item_id, items.item_name, sum(txn_details.quantity) as total_quantity
+FROM txn_details
+INNER JOIN items
+ON txn_details.item_id = items.item_id
+GROUP BY (txn_details.item_id, items.item_name)
+ORDER BY total_quantity DESC
+LIMIT 3;
+```
+
+The above SQL commands have also been added to the end of the setup.sql file. The outputs from the above queries can be viewed inside the logs for the database container. 
+    docker logs db1
