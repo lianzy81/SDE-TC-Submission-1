@@ -73,3 +73,13 @@ services:
     depends_on:
       - postgres
   
+  database:
+    restart: always
+    image: postgres:15.1
+    container_name: db1
+    expose:
+      - 5432
+    environment:
+      POSTGRES_PASSWORD: root
+    volumes:
+      - ./database/setup.sql:/docker-entrypoint-initdb.d/setup.sql
