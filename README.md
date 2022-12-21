@@ -179,12 +179,12 @@ GRANT sales_user to sal_user1;
 ### AWS System Architecture
 
 <p align = "center">
-<img src = "./images/AWS_SystemAtchitecture.png">
+<img src = "./images/AWS_SystemArchitecture.png">
 </p>
 <p align = "center">
 Fig.3 - AWS System Architecture Designed for the image processing company. 
 </p>
-<!-- ![AWS Architecture](./images/AWS_SystemAtchitecture.png) -->
+<!-- ![AWS Architecture](./images/AWS_SystemArchitecture.png) -->
 
 #### Assumptions
 - Company engineers use Apache Kafka to upload images.
