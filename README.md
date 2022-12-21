@@ -228,7 +228,9 @@ Fig.3 - AWS System Architecture Designed for the image processing company.
 - As the company scales up, it can gather data on the usage levels for each service and further optimize costs subscribing to lower price AWS packages that commit to a certain level of usage, as opposed to paying for every service on-demand. 
 
 #### Maintenance of environment and assets
-- Serverless variants can be chosen for MSK, Redshift and EC2 (e.g. Fargate) to offload the server environment management to AWS.
+- Serverless architecture variants can be chosen for the MSK and EC2 web apps, and the Redshift data-store to offload the server environment management to AWS. The serverless variants typically expose a RESTful API through the internet or VPN gateways for responding to requests. For the web apps, the serverless alternatives are paired with
+    - AWS Amplify Console to provide continuous deployment and hosting of static web resources (e.g. HTML, CSS, JavaScript, image files) that are loaded on the client's browser
+    - Amazon Cognito to provide user management and authentication
 - Housekeeping of the stored images and meta-data are already handled by the expiration action set in S3.
 - AWS S3 supports versioning. Hence, git repositories can be set up such that the company's processing scripts are uploaded, stored and versioned on S3 as CI/CD (continuous integration/continuous delivery) proceeds.
 
