@@ -198,16 +198,17 @@ Fig.3 - AWS System Architecture Designed for the image processing company.
 #### Assumptions
 - Company engineers use Apache Kafka to upload images.
 - The proceessed data is in a ready form to be copied to a Redshift data warehouse for business analysis. 
-- Company analysts use Tableau to perform analysis on the processed data (e.g. features derived from the image processing, relevant meta-data).
+- Company analysts use Tableau to perform analysis on the processed data (e.g. features derived from image processing).
 - Company has its own identify provider to provide a single-source of truth for all employee identities. 
 
 #### Overview
-- An AWS VPC (virtual private cloud) spanning at least two availability zones can be used to host the company's web annd image processing applications in the cloud. Each availability zone should also have at least two public subnets and two private subnets (only one is shown in Figure 3 due to space constraints). These best practices provide redundancy at the availability zone and subnet level for the gateways (both internet and private) to route traffic to, which enables high availability, fault tolerance and disaster recovery should any of the subnets or availability zone fail.
-- Images uploaded by public users via an API will be routed by the internet API gateway the EC2 (Elastic Compute Cloud) web appplication instance hosted on one of the public subnets. The EC2 web application will then store the ingested images and associated meta-data into an S3 object store hosted on a private subnet in the same availability zone.
-- Images uploaded by the Kafka stream managed by company engineers will be routed by a VPN gateway to the MSK (Managed Streaming for Apache Kakfa) web application instance hosted on one of the private subnets. The MSK web application will then store the ingested images and associated meta-data into the same S3 object store mentioned above.
+- An AWS VPC (virtual private cloud) spanning at least two availability zones in the company's region can be used to host the company's web annd image processing applications in the cloud. Each availability zone should also have at least two public subnets and two private subnets (only one is shown in Figure 3 due to space constraints). These best practices provide redundancy at the availability zone and subnet level for the gateways (both internet and private) to route traffic to, which enables high availability, fault tolerance and disaster recovery should any of the subnets or availability zone fail.
+- Images uploaded by public users via an API will be routed by the internet API gateway to the EC2 (Elastic Compute Cloud) web appplication instance hosted on one of the public subnets. The EC2 web application will then store the ingested images and associated meta-data into an S3 object store in the company's region.
+- Images uploaded by the Kafka stream managed by company engineers will be routed by a VPN gateway to the MSK (Managed Streaming for Apache Kakfa) web application instance hosted on one of the private subnets. The MSK web application will then store the ingested images and associated meta-data into S3.
 - Another EC2 instance hosted on the same private subnet then ingests the stored images and meta-data from S3, applies the company's proprietary image processing algorithm, and then uploads the processed data back to S3.
-- A Lambda service can be triggered daily to delete images and meta-data that are more than 7 days old for compliance and privacy.
-- An Redshift data warehouse instance can ingest relevant processed data (e.g. features derived from image processing, relevant meta-data) from S3 to serve as a business intellence resource for company analysts to access via the VPN gateway. Company analysts can also eaily connect Tableau to Redshift to access the data to perform relevant computations for business dashboards. If further transformations on the processed data is required before ingestion into Redshift, an AWS Glue service can be implemented in between S3 and Redshift to perform the relevant transformations before storing into Redshift.
+- Objects stored in S3 are redundantly stored across multiple devices, across multiple Availability Zones. This provides a very high level of durability and availability, which makes S3 ideal for archiving both the ingested and processed data.
+- An expiration action can be set for S3 to automatically delete specific objects (i.e. images, meta-data) that are more than 7 days old for compliance and privacy.
+- An Redshift data warehouse instance can ingest relevant processed data (e.g. features derived from image processing) from S3 to serve as a business intellence resource for company analysts to access via the VPN gateway. Company analysts can also eaily connect Tableau to Redshift to access the data and perform relevant computations for business dashboards. If further transformations on the processed data is required before ingestion into Redshift, an AWS Glue service can be implemented in between S3 and Redshift to perform the relevant transformations before storing into Redshift.
 
 #### Role Based Secure Access to AWS Environment and Resources
 - Different AWS IAM (Identity and Access Management) roles can be created for the company's employees (e.g. engineers, analysts) with differnt roles, as well as for the different services running on the VPC to secure secured. Different IAM policies can be attached to each IAM role with permissions to access only the resources each role requires (least priviledge). Relevant IAM roles can be assigned to employees from different groups, based on their identities federated from the company's identity provider. As the company expands, maintaining IAM roles is more efficient and secure than creating IAM user identties for each employee. This is because
@@ -217,20 +218,19 @@ Fig.3 - AWS System Architecture Designed for the image processing company.
 
 #### Data Security at Rest and in-Transit
 - Server side encryption can be set for both S3 and Redshift to secure stored data at rest. 
-- Https can be used to encrypt data in-transit as they are sent from public users/company employees to the cloud, and vice-versa.
+- Secure Sockets Layer (SSL) can be used to secure data in transit whereby encryption algorithms are used to scramble data exchanged via HTTPs URLs between public users/company employees and the AWS VPC.
 
 #### Scaling to meet user demand while keeping costs low
 - The elastic nature of compute (e.g. EC2, MSK) and storage (e.g. S3, EBS) on AWS allows the company to scale easily as user demand grows and to manage costs by only paying for extra resources when there is real demand. 
 - MSK can be provisioned with increased EBS (Elastic Bloc Store) volumes to provide a larger data retention buffer, in case of failures while handling larger Kafka streams. 
-- S3 is a low cost way to scale up and handle the larger data sizes from more images as user demand increases. If storage costs are stil too high, the company can also consider moving images that have been processed into lower cost S3 tiers with slower access before they are purged.
-- Redshift data warehouse is also designed to maintain low latency as it holds more structured data.
+- S3 is a low cost way to scale up and handle the larger data sizes from more images as user demand increases. If storage costs become too high, a transition action can be set to speed up transition of images that have been processed to lower cost S3 tiers (e.g. infrequent-access, one-zone-infrequent-access or glacier) before they are purged.
+- Redshift data warehouse is designed to maintain low latency as it holds more structured data.
 - As the company scales up, it can gather data on the usage levels for each service and further optimize costs subscribing to lower price AWS packages that commit to a certain level of usage, as opposed to paying for every service on-demand. 
 
 #### Maintenance of environment and assets
-- Lambda is serverless by nature, which means AWS will handle the maintenance of the server environment.
 - Serverless variants can be chosen for MSK, Redshift and EC2 (e.g. Fargate) to offload the server environment management to AWS.
-- Housekeeping of the stored images and meta-data are already handled by the Lambda service.
-- Git repositories can be set up such that the company's processing scripts are uploaded and stored on S3 as CI/CD (continuous integration/continuous delivery) proceeds.
+- Housekeeping of the stored images and meta-data are already handled by the expiration action set in S3.
+- AWS S3 supports versioning. Hence, git repositories can be set up such that the company's processing scripts are uploaded, stored and versioned on S3 as CI/CD (continuous integration/continuous delivery) proceeds.
 
 ---
 
