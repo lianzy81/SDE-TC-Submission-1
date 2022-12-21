@@ -179,7 +179,7 @@ GRANT sales_user to sal_user1;
 ### AWS System Architecture
 
 <p align = "center">
-<img src = "./images/ERD_v1.png">
+<img src = "./images/AWS_SystemAtchitecture.png">
 </p>
 <p align = "center">
 Fig.3 - AWS System Architecture Designed for the image processing company. 
