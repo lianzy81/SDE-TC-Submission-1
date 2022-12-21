@@ -64,6 +64,7 @@ Sample logs have been uploaed here under the same folder structure.
 #### (G) Tear down the airflow stack gracefully
     docker-compose down -v
 
+---
 
 ## Section 2: Databases
 
@@ -101,7 +102,7 @@ You can find the setup.sql file with the DDL statements at the location "databas
 #### (F) View each table using SQL.
     select * from <table_name>;
 
-#### (G) Exit psl and the docker container.
+#### (G) Exit psql and then exit the "db1" docker container.
     \q
     exit
 
@@ -137,6 +138,7 @@ The above SQL commands have also been added to the end of the setup.sql file. Th
 
     docker logs db1
 
+---
 
 ## Section 3: System Design
 
@@ -230,6 +232,8 @@ Fig.3 - AWS System Architecture Designed for the image processing company.
 - Housekeeping of the stored images and meta-data are already handled by the Lambda service.
 - Git repositories can be set up such that the company's processing scripts are uploaded and stored on S3 as CI/CD (continuous integration/continuous delivery) proceeds.
 
+---
+
 ## Section 4: Charts and APIs
 
 ### Screenshot of Dashboard
@@ -258,5 +262,6 @@ It may take a while before the chart shows. Behind the scenes, an API request is
 #### (D) Tear down the docker containers gracefully
     docker-compose down -v
 
+---
 
 ## Section 5: Machine Learning
