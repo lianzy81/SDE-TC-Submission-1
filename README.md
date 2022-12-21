@@ -101,6 +101,13 @@ You can find the setup.sql file with the DDL statements at the location "databas
 #### (F) View each table using SQL.
     select * from <table_name>;
 
+#### (G) Exit psl and the docker container.
+    \q
+    exit
+
+#### (H) Tear down the docker containers gracefully
+    docker-compose down -v
+
 
 ## Part 2: Write SQL Statements for the following questions.
 
@@ -225,6 +232,14 @@ Fig.3 - AWS System Architecture Designed for the image processing company.
 
 ## Section 4: Charts and APIs
 
+### Screenshot of Dashboard
+<p align = "center">
+<img src = "./images/Covid19_dashboard.png">
+</p>
+<p align = "center">
+Fig.4 - Screenshot of Covid-19 Statistics Dashboard. 
+</p>
+
 The required Covid-19 statistics dashboard is implemented using Flask and Plotly.dash via a docker container using a custom Docker image (app_frontend:7). The relevant Dockerfile and requirements.txt file are included in the "dashboard" directory of this repo for building the docker image, if necessary. The "docker-compose.yml" file is also updated to start up the dashboard container.
 
 ### Execution Steps
@@ -240,14 +255,8 @@ Once ready, you should see one log entry of "Booting worker with pid" at the end
 #### (C) View dashboard on a web-browser (e.g. Chrome) at http://localhost:8050/dashboard
 It may take a while before the chart shows. Behind the scenes, an API request is made to https://api.covid19api.com/country/singapore/status/confirmed and the returned data is loaded into a pandas Dataframe. A new column "Daily Cases" is computed by taking the difference between consecutive rows of the "Cases" column. Finally, the count of "Daily Cases" is then plotted against "Date" as a bar chart via plotly.express, and rendered on the dashboard. 
 
-### Screenshot of Dashboard
-<p align = "center">
-<img src = "./images/Covid19_dashboard.png">
-</p>
-<p align = "center">
-Fig.4 - Screenshot of Covid-19 Statistics Dashboard. 
-</p>
-
+#### (D) Tear down the docker containers gracefully
+    docker-compose down -v
 
 
 ## Section 5: Machine Learning
