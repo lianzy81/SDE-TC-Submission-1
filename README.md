@@ -83,10 +83,10 @@ Fig.2 - ERD for "sales" Database
 You can find the setup.sql file with the DDL statements at the location "database/setup.sql".
 
 ### Execution Steps
-#### (A) Start and run all of the containers used in the stack
+#### (A) Start the database docker container "db1" (along with other containers)
     docker-compose up -d
 
-#### (B) View the logs associated with the database and table creation inside the Docker container db1
+#### (B) View the logs associated with the database and table creation inside the docker container "db1"
     docker logs db1
 
 #### (C) Enter into container db1, and then into postgres to view the tables created.
@@ -224,6 +224,30 @@ Fig.3 - AWS System Architecture Designed for the image processing company.
 - Git repositories can be set up such that the company's processing scripts are uploaded and stored on S3 as CI/CD (continuous integration/continuous delivery) proceeds.
 
 ## Section 4: Charts and APIs
+
+The required Covid-19 statistics dashboard is implemented using Flask and Plotly.dash via a docker container using a custom Docker image (app_frontend:7). The relevant Dockerfile and requirements.txt file are included in the "dashboard" directory of this repo for building the docker image, if necessary. The "docker-compose.yml" file is also updated to start up the dashboard container.
+
+### Execution Steps
+
+#### (A) Build docker image and start the dashboard container "dashboard1" (along with other containers)
+    docker-compose up -d
+
+#### (B) Verify that the dashboard container is ready
+    docker logs dashboard1
+
+Once ready, you should see one log entry of "Booting worker with pid" at the end.
+
+#### (C) View dashboard on a web-browser (e.g. Chrome) at http://localhost:8050/dashboard
+It may take a while before the chart shows. Behind the scenes, an API request is made to https://api.covid19api.com/country/singapore/status/confirmed and the returned data is loaded into a pandas Dataframe. A new column "Daily Cases" is computed by taking the difference between consecutive rows of the "Cases" column. Finally, the count of "Daily Cases" is then plotted against "Date" as a bar chart via plotly.express, and rendered on the dashboard. 
+
+### Screenshot of Dashboard
+<p align = "center">
+<img src = "./images/Covid19_dashboard.png">
+</p>
+<p align = "center">
+Fig.4 - Screenshot of Covid-19 Statistics Dashboard. 
+</p>
+
 
 
 ## Section 5: Machine Learning
