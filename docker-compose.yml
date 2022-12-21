@@ -83,3 +83,16 @@ services:
       POSTGRES_PASSWORD: root
     volumes:
       - ./database/setup.sql:/docker-entrypoint-initdb.d/setup.sql
+
+  dashboard:
+    restart: always
+    build: ./dashboard
+    image: app_frontend:7
+    container_name: dashboard1
+    working_dir: /src
+    command: gunicorn --bind 0.0.0.0:8050 wsgi:app -w 1
+    tty: true
+    ports:
+      - 8050:8050
+    volumes:
+      - ./dashboard/src:/src 
