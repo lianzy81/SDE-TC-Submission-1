@@ -10,6 +10,8 @@ The submission is split into 5 sections:
 All codes are implemented on an Ubuntu 20.04.5 LTS laptop with the following installed:
 - Docker version 20.10.21
 - docker-compose version 1.29.2
+
+All codes and data are stored in a NTFS formated D:drive that is mounted onto the Ubuntu partition.
 ---
 
 ## Section 1: Data Pipelines
