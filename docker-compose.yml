@@ -96,3 +96,16 @@ services:
       - 8050:8050
     volumes:
       - ./dashboard/src:/src 
+  
+  ml:
+    image: jupyter/datascience-notebook:notebook-6.5.2 #jupyter/pyspark-notebook:spark-3.3.1
+    container_name: jupyter1
+    ports:
+      - 8888:8888
+    tty: true
+    volumes:
+      - ./ml/notebooks:/home/jovyan/work/notebooks/
+      - ./ml/src:/home/jovyan/work/src
+      - ./ml/data:/home/jovyan/work/data/
+    environment:
+      - PYTHONPATH=/home/jovyan/work/src
