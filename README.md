@@ -268,10 +268,15 @@ It may take a while before the chart shows. Behind the scenes, an API request is
 
 ## Section 5: Machine Learning
 
-This coding for this section is implemented using Jupyter Notebook inside a docker container using the Docker image jupyter/datascience-notebook:notebook-6.5.2. The "docker-compose.yml" file is updated to start up an "ml" service with container name "jupyter1". The locations of the code are at
+This coding for this section is implemented using Jupyter Notebook inside a docker container using the Docker image jupyter/datascience-notebook:notebook-6.5.2. The "docker-compose.yml" file is updated to start up an "ml" service with container name "jupyter1". 
+
+The data is located at
+- ml/data
+
+The relevant codes are located at
 - ml/notebooks/train_model.ipynb
 - ml/src/ml_preprocess.py
 
 Details of the data exploration, preprocessing (ordinal and onehot encoding, using KMeans to get clustering label as feature), model training and evaluation, applying the model to predict on the given sample are in the ml/notebooks/train_model.ipynb file.
- 
+
 A gradient boosted regression model is fitted and the predicted buying price for the given sample is "low".
